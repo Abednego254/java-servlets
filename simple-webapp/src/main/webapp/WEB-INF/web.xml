@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+  <display-name>simple-webapp</display-name>
+
+  <!--
+    STEP 1: Declare the servlet.
+    We give it a name ("MyFirstServlet") and tell the container
+    which Java class to use for this servlet.
+  -->
+  <servlet>
+    <servlet-name>MyFirstServlet</servlet-name>
+    <servlet-class>com.example.MyFirstServlet</servlet-class>
+  </servlet>
+
+  <!--
+    STEP 2: Map the servlet to a URL.
+    This says: "when someone visits /hello, send the request to MyFirstServlet"
+  -->
+  <servlet-mapping>
+    <servlet-name>MyFirstServlet</servlet-name>
+    <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+
+  <!-- ============================================================ -->
+  <!--  AboutUsServlet — extends GenericServlet (2nd way)           -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>AboutUsServlet</servlet-name>
+    <servlet-class>com.example.AboutUsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AboutUsServlet</servlet-name>
+    <url-pattern>/about</url-pattern>
+  </servlet-mapping>
+
+  <!-- ============================================================ -->
+  <!--  RegisterStudentServlet — extends HttpServlet (3rd way)      -->
+  <!--  GET  /register → shows the registration form (doGet)        -->
+  <!--  POST /register → processes the form submission (doPost)     -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>RegisterStudentServlet</servlet-name>
+    <servlet-class>com.example.RegisterStudentServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RegisterStudentServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+
+</web-app>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+  <display-name>hospital-webapp</display-name>
+
+  <!-- ============================================================ -->
+  <!--  WAY 1: HomeServlet — directly implements the Servlet        -->
+  <!--          interface. We must override all 5 methods.          -->
+  <!--  URL: /home                                                  -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>com.example.HomeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+  <!-- ============================================================ -->
+  <!--  WAY 2: ServicesServlet — extends GenericServlet.            -->
+  <!--          Only service() must be overridden.                  -->
+  <!--  URL: /services                                              -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>ServicesServlet</servlet-name>
+    <servlet-class>com.example.ServicesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServicesServlet</servlet-name>
+    <url-pattern>/services</url-pattern>
+  </servlet-mapping>
+
+  <!-- ============================================================ -->
+  <!--  WAY 3: BookAppointmentServlet — extends HttpServlet.        -->
+  <!--          doGet()  → shows the appointment form               -->
+  <!--          doPost() → processes the form and shows confirmation-->
+  <!--  URL: /appointment                                           -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>BookAppointmentServlet</servlet-name>
+    <servlet-class>com.example.BookAppointmentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BookAppointmentServlet</servlet-name>
+    <url-pattern>/appointment</url-pattern>
+  </servlet-mapping>
+
+</web-app>
