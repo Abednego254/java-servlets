@@ -8,33 +8,6 @@ import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * ============================================================
- *  ServicesServlet — Our Services Page for SanityCare Hospital
- *
- *  WAY 2: EXTENDING GenericServlet
- * ============================================================
- *
- *  Why is this better than implementing Servlet directly?
- *  ──────────────────────────────────────────────────────
- *  GenericServlet already implements the Servlet interface for us.
- *  It provides default (empty/no-op) implementations for:
- *    - init()
- *    - destroy()
- *    - getServletConfig()
- *    - getServletInfo()
- *
- *  This means WE only have to override the ONE method that actually
- *  matters for our logic: service().
- *
- *  The result is LESS BOILERPLATE and CLEANER code compared to Way 1.
- *
- *  NOTE: GenericServlet is still HTTP-agnostic. The service() method
- *  still receives the generic ServletRequest / ServletResponse,
- *  not the HTTP-specific versions. That upgrade comes in Way 3.
- *
- *  Registered via web.xml → URL pattern: /services
- */
 public class ServicesServlet extends GenericServlet {
 
     /**

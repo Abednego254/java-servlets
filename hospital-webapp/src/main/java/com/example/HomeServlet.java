@@ -9,51 +9,17 @@ import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * ============================================================
- *  HomeServlet — Home / Landing Page for SanityCare Hospital
- *
- *  WAY 1: DIRECTLY IMPLEMENTING THE Servlet INTERFACE
- * ============================================================
- *
- *  When you implement the Servlet interface you must provide
- *  concrete bodies for ALL FIVE methods defined in the interface:
- *
- *    1. init(ServletConfig config)   — called ONCE when the servlet is first
- *                                      loaded into memory. Use it for one-time
- *                                      setup (e.g. loading config params).
- *
- *    2. service(ServletRequest req,  — called for EVERY incoming request.
- *               ServletResponse res)   This is where our page logic lives.
- *
- *    3. destroy()                    — called ONCE when the server shuts down
- *                                      or the webapp is un-deployed. Clean up
- *                                      resources here (DB connections, etc.).
- *
- *    4. getServletConfig()           — returns the ServletConfig object that
- *                                      was passed to init(). Used to read
- *                                      init parameters from web.xml.
- *
- *    5. getServletInfo()             — returns a human-readable description
- *                                      of this servlet.
- *
- *  Registered via web.xml → URL pattern: /home
- */
 public class HomeServlet implements Servlet {
 
     // We store the config so getServletConfig() can return it.
     private ServletConfig servletConfig;
 
-    // ── 1. init() ──────────────────────────────────────────────────────────
     @Override
     public void init(ServletConfig config) throws ServletException {
         this.servletConfig = config;
         System.out.println("==> HomeServlet: init() called — servlet loaded into memory.");
     }
 
-    // ── 2. service() ───────────────────────────────────────────────────────
-    //  Every single HTTP request (GET, POST, etc.) ends up here because
-    //  the raw Servlet interface has no concept of HTTP methods at all.
     @Override
     public void service(ServletRequest request, ServletResponse response)
             throws ServletException, IOException {

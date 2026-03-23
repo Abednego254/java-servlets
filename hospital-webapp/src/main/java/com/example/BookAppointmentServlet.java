@@ -8,52 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * ============================================================
- *  BookAppointmentServlet — Appointment Booking Page
- *
- *  WAY 3: EXTENDING HttpServlet
- * ============================================================
- *
- *  The Servlet Inheritance Chain (remember this!):
- *
- *    Servlet (interface)
- *       └── GenericServlet (abstract class)  ← Way 2 stopped here
- *               └── HttpServlet (abstract class)  ← Way 3 uses this
- *                       └── BookAppointmentServlet  ← YOU ARE HERE
- *
- *  WHY HttpServlet is the MOST POPULAR approach:
- *  ─────────────────────────────────────────────
- *  HttpServlet knows about the HTTP protocol. Instead of a single
- *  service() method that handles ALL types of requests, it gives you
- *  a SEPARATE method for each HTTP verb:
- *
- *    doGet()    → handles GET  requests  (loading a page, clicking a link)
- *    doPost()   → handles POST requests  (submitting a form)
- *    doPut()    → handles PUT  requests  (updating a resource — REST APIs)
- *    doDelete() → handles DELETE requests (deleting a resource — REST APIs)
- *
- *  HOW it works internally:
- *  HttpServlet's own service() reads the HTTP method from the request
- *  and dispatches to the correct doXxx() automatically. You never call
- *  service() yourself.
- *
- *  ALSO NOTICE the parameter upgrade:
- *    ServletRequest  →  HttpServletRequest   (has getParameter, getSession, getCookies...)
- *    ServletResponse →  HttpServletResponse  (has sendRedirect, setStatus, addCookie...)
- *
- *  Registered via web.xml → URL pattern: /appointment
- */
 public class BookAppointmentServlet extends HttpServlet {
 
     // ================================================================
     //  doGet() — runs when the browser sends a GET request to /appointment
-    //
-    //  A GET request happens when:
-    //   - The user types the URL and hits Enter
-    //   - The user clicks a link pointing to /appointment
-    //
-    //  Our response: serve the appointment BOOKING FORM as HTML.
     // ================================================================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -223,13 +181,6 @@ public class BookAppointmentServlet extends HttpServlet {
 
     // ================================================================
     //  doPost() — runs when the browser sends a POST request to /appointment
-    //
-    //  A POST request happens when the user fills the form above and
-    //  clicks "Confirm Booking". The browser sends the form fields in
-    //  the HTTP request body (not visible in the URL — safer!).
-    //
-    //  request.getParameter("fieldName") reads any form field by its
-    //  name="" attribute. This is the most-used method in Java EE!
     // ================================================================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
