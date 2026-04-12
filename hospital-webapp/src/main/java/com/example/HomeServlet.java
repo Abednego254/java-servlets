@@ -5,6 +5,8 @@ import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,93 +28,28 @@ public class HomeServlet implements Servlet {
 
         System.out.println("==> HomeServlet: service() called — serving the home page.");
 
+        // --- GLOBAL VISITOR COUNTER (ServletContext Attribute) ---
+        synchronized(this.getServletConfig().getServletContext()) {
+            Integer totalVisitors = (Integer) this.getServletConfig().getServletContext().getAttribute("totalVisitors");
+            if (totalVisitors == null) {
+                totalVisitors = 1;
+            } else {
+                totalVisitors++;
+            }
+            this.getServletConfig().getServletContext().setAttribute("totalVisitors", totalVisitors);
+        }
+
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter printout = response.getWriter();
 
-        printout.println("<!DOCTYPE html>");
-        printout.println("<html lang='en'>");
-        printout.println("<head>");
-        printout.println("  <meta charset='UTF-8'>");
-        printout.println("  <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
-        printout.println("  <title>SanityCare Hospital</title>");
-        printout.println("  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap' rel='stylesheet'>");
-        printout.println("  <style>");
-        printout.println("    * { margin: 0; padding: 0; box-sizing: border-box; }");
-        printout.println("    body { font-family: 'Inter', sans-serif; background: #050d1a; color: #e0e6f0; }");
-
-        // --- NAV ---
-        printout.println("    nav { display: flex; justify-content: space-between; align-items: center;");
-        printout.println("          padding: 1.2rem 4rem; background: rgba(5,13,30,0.97);");
-        printout.println("          border-bottom: 1px solid rgba(56,189,248,0.15); position: sticky; top:0; z-index:100; }");
-        printout.println("    .logo { font-size: 1.5rem; font-weight: 800; color: #38bdf8; letter-spacing: -0.5px; }");
-        printout.println("    .logo span { color: #fff; }");
-        printout.println("    nav ul { list-style: none; display: flex; gap: 2rem; }");
-        printout.println("    nav ul li a { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }");
-        printout.println("    nav ul li a:hover, nav ul li a.active { color: #38bdf8; }");
-        printout.println("    .nav-cta { background: #38bdf8; color: #050d1a !important; padding: 0.5rem 1.2rem;");
-        printout.println("               border-radius: 6px; font-weight: 700 !important; transition: background 0.2s !important; }");
-        printout.println("    .nav-cta:hover { background: #7dd3fc !important; color: #050d1a !important; }");
-
-        // --- HERO ---
-        printout.println("    .hero { min-height: 85vh; display: flex; flex-direction: column; justify-content: center;");
-        printout.println("            align-items: center; text-align: center; padding: 4rem 2rem;");
-        printout.println("            background: radial-gradient(ellipse at 50% 40%, rgba(56,189,248,0.1) 0%, transparent 70%); }");
-        printout.println("    .badge { display: inline-block; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3);");
-        printout.println("             color: #38bdf8; padding: 0.35rem 1rem; border-radius: 20px; font-size: 0.8rem;");
-        printout.println("             font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem; }");
-        printout.println("    .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1;");
-        printout.println("               color: #fff; margin-bottom: 1.5rem; max-width: 820px; }");
-        printout.println("    .hero h1 span { background: linear-gradient(135deg, #38bdf8, #34d399);");
-        printout.println("                    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }");
-        printout.println("    .hero p { font-size: 1.15rem; color: #94a3b8; max-width: 600px; line-height: 1.7; margin-bottom: 2.5rem; }");
-        printout.println("    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }");
-        printout.println("    .btn-primary { background: linear-gradient(135deg, #38bdf8, #34d399); color: #050d1a;");
-        printout.println("                   padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none;");
-        printout.println("                   font-weight: 700; font-size: 1rem; transition: opacity 0.2s; }");
-        printout.println("    .btn-primary:hover { opacity: 0.85; }");
-        printout.println("    .btn-secondary { border: 1px solid rgba(56,189,248,0.4); color: #38bdf8;");
-        printout.println("                     padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none;");
-        printout.println("                     font-weight: 600; font-size: 1rem; transition: background 0.2s; }");
-        printout.println("    .btn-secondary:hover { background: rgba(56,189,248,0.08); }");
-
-        // --- STATS ---
-        printout.println("    .stats { display: flex; justify-content: center; gap: 4rem; padding: 3rem 2rem;");
-        printout.println("             border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);");
-        printout.println("             background: rgba(255,255,255,0.02); flex-wrap: wrap; }");
-        printout.println("    .stat { text-align: center; }");
-        printout.println("    .stat-number { font-size: 2.2rem; font-weight: 800; color: #38bdf8; }");
-        printout.println("    .stat-label { font-size: 0.85rem; color: #64748b; margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.5px; }");
-
-        // --- DEPARTMENTS ---
-        printout.println("    .depts { padding: 5rem 4rem; }");
-        printout.println("    .section-header { text-align: center; margin-bottom: 3rem; }");
-        printout.println("    .section-header h2 { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }");
-        printout.println("    .section-header p { color: #64748b; font-size: 1rem; }");
-        printout.println("    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }");
-        printout.println("    .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);");
-        printout.println("            border-radius: 12px; padding: 1.8rem; transition: border-color 0.25s, transform 0.25s; }");
-        printout.println("    .card:hover { border-color: rgba(56,189,248,0.4); transform: translateY(-4px); }");
-        printout.println("    .card-icon { font-size: 2rem; margin-bottom: 1rem; }");
-        printout.println("    .card h3 { color: #fff; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }");
-        printout.println("    .card p { color: #64748b; font-size: 0.875rem; line-height: 1.6; }");
-
-        // --- FOOTER ---
-        printout.println("    footer { text-align: center; padding: 2.5rem; background: rgba(0,0,0,0.4);");
-        printout.println("             border-top: 1px solid rgba(255,255,255,0.06); color: #475569; font-size: 0.875rem; }");
-        printout.println("    footer a { color: #38bdf8; text-decoration: none; }");
-        printout.println("  </style>");
-        printout.println("</head>");
-        printout.println("<body>");
-
-        // ── NAV ──
-        printout.println("  <nav>");
-        printout.println("    <div class='logo'>Sanity<span>Care</span></div>");
-        printout.println("    <ul>");
-        printout.println("      <li><a class='active' href='/hospital-webapp/home'>Home</a></li>");
-        printout.println("      <li><a href='/hospital-webapp/services'>Our Services</a></li>");
-        printout.println("      <li><a class='nav-cta' href='/hospital-webapp/appointment'>Book Appointment</a></li>");
-        printout.println("    </ul>");
-        printout.println("  </nav>");
+        // Cast for the template
+        HttpServletRequest httpReq = (HttpServletRequest) request;
+        HtmlTemplate.renderHeader(httpReq, printout, "SanityCare Hospital", "home");
+        
+        // ── INCLUDE ──
+        // Demonstrating RequestDispatcher.include()
+        // We pull the "NoticeBanner" from another servlet and inject it here!
+        request.getRequestDispatcher("/notice").include(request, response);
 
         // ── HERO ──
         printout.println("  <section class='hero'>");
@@ -168,13 +105,13 @@ public class HomeServlet implements Servlet {
         printout.println("    </div>");
         printout.println("  </section>");
 
-        // ── FOOTER ──
-        printout.println("  <footer>");
-        printout.println("    <p>&copy; 2026 SanityCare Hospital &nbsp;|&nbsp; <a href='/hospital-webapp/services'>Our Services</a> &nbsp;|&nbsp; <a href='/hospital-webapp/appointment'>Book Appointment</a></p>");
-        printout.println("  </footer>");
-
-        printout.println("</body>");
-        printout.println("</html>");
+        try {
+            // Use the existing httpReq variable
+            HttpServletResponse httpRes = (HttpServletResponse) response;
+            HtmlTemplate.includeFooter(httpReq, httpRes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ── 3. destroy() ───────────────────────────────────────────────────────
