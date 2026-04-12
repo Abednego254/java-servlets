@@ -1,60 +1,81 @@
-# 5-Minute Presentation: The Evolution of Java Servlets
+# 10-Minute Presentation Script: The Evolution of Java Servlets & SOLID Architecture
 
-**Estimated Time:** 5 Minutes
+**Estimated Time:** 10 Minutes
 **Project:** SanityCare Hospital Web App
 
 ---
 
-## 1. Introduction & Setup (1 Minute)
-**"Welcome everyone. Today I'm going to walk you through how we built the SanityCare Hospital Web App, specifically focusing on the three different ways to create Java Servlets."**
+## Introduction & Setup (1.5 Minutes)
+"Good morning, everyone. Thank you for joining me. Today, I am excited to walk you through the architectural journey of our SanityCare Hospital Web App. I'm going to take you behind the scenes, focusing on the three different foundational ways we can build Java Servlets. But more importantly, I’ll show you how we took a working application and elevated it to enterprise standards by applying core SOLID principles.
 
-We started with a completely blank canvas using the standard `maven-archetype-webapp`. To get it ready for modern Java, we made **two critical changes**:
-1. **`pom.xml`**: We added the `jakarta.servlet-api` (version 6.0) as a *provided* dependency and configured the maven compiler plugin for Java 11.
-2. **`web.xml`**: We upgraded the root schema to Jakarta EE 6.0 so we could properly register our servlets.
+When we began, we started completely from scratch. We fired up a blank canvas using the standard `maven-archetype-webapp`. Now, out of the box, that archetype is a bit dated. To bring it into the modern era, we made two critical updates before writing any code.
 
----
+First, we jumped into our `pom.xml`. We added the `jakarta.servlet-api` version 6.0 as a provided dependency, ensuring we were using the latest enterprise specifications. We also updated the Maven compiler plugin to leverage Java 11. 
 
-## 2. Way 1: The Raw Interface (1 Minute)
-**"Our first approach was building the `HomeServlet` by directly implementing the `Servlet` interface."**
+Second, we went into our `web.xml` deployment descriptor. We bumped the root schema right up to Jakarta EE 6.0. This gave us the ability to properly and seamlessly register our Servlets. With our environment modernized, we started building."
 
-Because `Servlet` is an interface, Java enforces a strict contract. We *had* to write concrete code for all **5 lifecycle methods**, even if we didn't need them all:
-- `init()` (Called once when memory is allocated)
-- **`service()`** (This is where our actual HTML generation lived)
-- `destroy()` (Called once during shutdown)
-- `getServletConfig()` & `getServletInfo()`
+## Way 1: The Raw Interface (1.5 Minutes)
+"Our very first task was to build a landing page, the `HomeServlet`. And to do this, we took the most foundational approach possible: directly implementing the `Servlet` interface.
 
-**The Takeaway:** It works perfectly for our landing page, but it forces us to write a lot of boilerplate code just to get a single `service()` method running.
+Now, working directly with an interface in Java means you are signing a strict contract. We were forced to write concrete implementations for all five lifecycle methods, regardless of whether we actually needed them. 
 
----
+We had to implement:
+- `init()`, which is triggered precisely once when the Servlet is loaded into memory.
+- `destroy()`, called during server shutdown.
+- `getServletConfig()` and `getServletInfo()`, which provide metadata.
+- And finally, the `service()` method. This is where the magic happens, and where our actual HTML generation code lived.
 
-## 3. Way 2: The Abstract Class (1 Minute)
-**"To display our Medical Departments, we built the `ServicesServlet`. This time, we extended `GenericServlet`, which is a massive quality-of-life improvement."**
+**The major takeaway here:** While this approach gave us a perfectly functional landing page, it was highly inefficient from a developer standpoint. It forced us to write a large amount of boilerplate code just to get that single `service()` method executing."
 
-### Why is it better?
-`GenericServlet` is an abstract class that already implements the `Servlet` interface for us. It provides "dummy" or default implementations for `init()`, `destroy()`, and the config methods. 
+## Way 2: The Abstract Class (1.5 Minutes)
+"Realizing the boilerplate issue, we pivoted for our next component. We needed a page to display our various medical departments. So, we built the `ServicesServlet`. 
 
-**The Takeaway:** We only had to override exactly **one** method: `service()`. This drastically reduced our boilerplate code, making `ServicesServlet` much cleaner and faster to write.
+This time, instead of the raw interface, we extended `GenericServlet`. This was an immediate and massive quality-of-life improvement. 
 
----
+Why was it better? Because `GenericServlet` is an abstract class that has already implemented the `Servlet` interface behind the scenes. It generously provides default, 'dummy' implementations for `init()`, `destroy()`, and the configuration methods. 
 
-## 4. Way 3: The Industry Standard (1.5 Minutes)
-**"Finally, we built the `BookAppointmentServlet`. For this, we used the ultimate approach: extending `HttpServlet`."**
+**The major takeaway:** By extending `GenericServlet`, we drastically reduced our boilerplate. We only had to override exactly one method—the `service()` method. Our `ServicesServlet` became incredibly clean, focused, and much faster to develop."
 
-### Why is this the gold standard?
-The previous two ways use a generic `service()` method that treats every request the exact same way. `HttpServlet` changes the game because it actually understands the **HTTP Protocol**.
+## Way 3: The Industry Standard (2 Minutes)
+"Finally, we needed to tackle the most complex part of our application: patient scheduling. For this, we built the `BookAppointmentServlet`. And we pulled out the ultimate tool for the job—we extended `HttpServlet`.
 
-Instead of a single `service()` method, it acts as an intelligent traffic router. It looks at the incoming HTTP request and redirects it to specific methods:
-1. **`doGet()`**: If a user is just loading a page (like clicking "Book Appointment"), it triggers `doGet()`. This is where we safely serve the HTML booking form.
-2. **`doPost()`**: When the user fills out their sensitive medical data and hits submit, the browser sends a `POST` request. `HttpServlet` catches this and routes it perfectly to our `doPost()` method, where we process their data securely via the request body (hidden from the URL) and generate a success confirmation.
+Why is `HttpServlet` the gold standard in the industry? Because the previous two methods utilize a generic `service()` method that treats absolutely every request the exact same way. `HttpServlet` changes the game entirely because it inherently understands the HTTP protocol.
 
-We also get access to upgraded objects—`HttpServletRequest` and `HttpServletResponse`—which give us superpowers like reading cookies, managing sessions, and setting HTTP status codes like `400 Bad Request`.
+Instead of one generic entry point, `HttpServlet` acts as an intelligent traffic router. It inspects the incoming request and dispatches it to highly specific methods.
 
----
+Here’s how we used it:
+First, a user navigates to our booking page. The browser fires a standard HTTP GET request. Our Servlet seamlessly routes this to the `doGet()` method, where we safely render and serve the HTML booking form.
 
-## 5. Conclusion (30 Seconds)
-**"To wrap up, you can see the clear evolutionary chain of Java Servlets:"**
-1. **`Servlet`:** The raw interface. Strict rules, lots of boilerplate.
-2. **`GenericServlet`:** Removes the boilerplate, leaving just the logic.
-3. **`HttpServlet`:** The industry standard. Adds full HTTP awareness, perfectly separating safe page-loads (GET) from secure data submissions (POST).
+Then, the user fills out their sensitive medical data and clicks submit. The browser sends a POST request. `HttpServlet` catches this POST request and routes it directly to our `doPost()` method. Secure data handling is now fundamentally separated from page loading. 
 
-**"Thank you. Are there any questions?"**
+We were also granted access to upgraded objects—`HttpServletRequest` and `HttpServletResponse`—yielding powerful capabilities like reading cookies, managing user sessions, and enforcing HTTP status codes."
+
+## Elevating to Enterprise Standards with SOLID Principles (2.5 Minutes)
+"At this point, we had a fully functional application. It worked perfectly. But as engineers, 'working' isn't enough. We recognized a few glaring architectural flaws.
+
+First, we had massive duplication of UI code. Our CSS styles and HTML wrappers were copy-pasted across all three Servlets. Second, our `BookAppointmentServlet` was doing way too much—it was rendering views, handling HTTP routing, and processing complex business logic to validate patient data and generate reference numbers. 
+
+This violated fundamental software engineering rules. So, we stopped, analyzed our code, and heavily refactored the application using two core SOLID principles.
+
+**Principle Number 1: The Single Responsibility Principle (SRP)**
+SRP states that a class should have one, and only one, reason to change. Our Servlets were acting as routers, UI renderers, and business logic processors all at once. 
+
+To fix this, we created a dedicated `HtmlTemplate` class. We extracted all the HTML structure, our premium CSS animations, and layout rendering into this single class. Now, if we want to change our theme, we simply edit one file. The Servlets were reduced to their true purpose: acting purely as HTTP Controllers.
+
+We also extracted all the appointment generation logic completely out of the Servlet and entirely into a dedicated service.
+
+**Principle Number 2: The Dependency Inversion Principle (DIP)**
+DIP states that high-level modules should not depend on low-level concrete implementations, but rather on abstractions.
+
+So, instead of having our `BookAppointmentServlet` rely on a hardcoded implementation for booking, we created an abstract interface called `AppointmentService`. We then built an `AppointmentServiceImpl` to handle the actual data processing, and injected that service into our Servlet.
+
+Why does this matter? Tomorrow, the hospital might ask us to change how appointments are processed—maybe they want to save them to a cloud SQL database or trigger an SMS notification API. Because our Servlet relies on an abstraction, we can seamlessly swap out the implementation for a new one without altering a single line of our Servlet’s routing code. The system is now extensible, modular, and testable."
+
+## Conclusion (1 Minute)
+"To wrap up, you can see clearly how we matured this project on two separate fronts.
+
+First, the **evolution of the Java architecture itself**: We journeyed from the rigid, boilerplate-heavy `Servlet` interface, to the streamlined `GenericServlet`, and finally arrived at the HTTP-aware, industry-standard `HttpServlet`. 
+
+Second, the **evolution of software design**: We started with tangled, monolithic code files that got the job done quickly. But we took the time to step back and refactor to a maintainable, enterprise-grade architecture. By aggressively applying the Single Responsibility Principle and the Dependency Inversion Principle, we utilized interface-driven services and UI components to ensure our application can scale safely into the future.
+
+Thank you very much. I'll now open the floor to any questions."

@@ -4,6 +4,8 @@ import jakarta.servlet.GenericServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,81 +25,8 @@ public class ServicesServlet extends GenericServlet {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        out.println("<!DOCTYPE html>");
-        out.println("<html lang='en'>");
-        out.println("<head>");
-        out.println("  <meta charset='UTF-8'>");
-        out.println("  <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
-        out.println("  <title>Our Services | SanityCare Hospital</title>");
-        out.println("  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap' rel='stylesheet'>");
-        out.println("  <style>");
-        out.println("    * { margin: 0; padding: 0; box-sizing: border-box; }");
-        out.println("    body { font-family: 'Inter', sans-serif; background: #050d1a; color: #e0e6f0; }");
-
-        // NAV
-        out.println("    nav { display: flex; justify-content: space-between; align-items: center;");
-        out.println("          padding: 1.2rem 4rem; background: rgba(5,13,30,0.97);");
-        out.println("          border-bottom: 1px solid rgba(56,189,248,0.15); position: sticky; top:0; z-index:100; }");
-        out.println("    .logo { font-size: 1.5rem; font-weight: 800; color: #38bdf8; }");
-        out.println("    .logo span { color: #fff; }");
-        out.println("    nav ul { list-style: none; display: flex; gap: 2rem; }");
-        out.println("    nav ul li a { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }");
-        out.println("    nav ul li a:hover, nav ul li a.active { color: #38bdf8; }");
-        out.println("    .nav-cta { background: #38bdf8; color: #050d1a !important; padding: 0.5rem 1.2rem; border-radius: 6px; font-weight: 700 !important; }");
-
-        // PAGE HEADER
-        out.println("    .page-header { padding: 5rem 4rem 3rem; text-align: center;");
-        out.println("                   background: radial-gradient(ellipse at 50% 0%, rgba(52,211,153,0.1) 0%, transparent 65%); }");
-        out.println("    .badge { display: inline-block; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);");
-        out.println("             color: #34d399; padding: 0.35rem 1rem; border-radius: 20px; font-size: 0.8rem;");
-        out.println("             font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.2rem; }");
-        out.println("    .page-header h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; margin-bottom: 1rem; }");
-        out.println("    .page-header h1 span { background: linear-gradient(135deg, #34d399, #38bdf8);");
-        out.println("                           -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }");
-        out.println("    .page-header p { color: #94a3b8; font-size: 1.05rem; max-width: 600px; margin: 0 auto; line-height: 1.7; }");
-
-        // SERVICES GRID
-        out.println("    .services-section { padding: 4rem; max-width: 1200px; margin: 0 auto; }");
-        out.println("    .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;");
-        out.println("                     color: #34d399; margin-bottom: 0.6rem; }");
-        out.println("    .services-section h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 2rem; }");
-        out.println("    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }");
-        out.println("    .service-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);");
-        out.println("                    border-radius: 14px; padding: 2rem; transition: border-color 0.25s, transform 0.25s; }");
-        out.println("    .service-card:hover { border-color: rgba(52,211,153,0.4); transform: translateY(-4px); }");
-        out.println("    .service-icon { font-size: 2.2rem; margin-bottom: 1rem; }");
-        out.println("    .service-card h3 { color: #fff; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }");
-        out.println("    .service-card p { color: #64748b; font-size: 0.875rem; line-height: 1.65; margin-bottom: 1rem; }");
-        out.println("    .tag { display: inline-block; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25);");
-        out.println("           color: #38bdf8; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.7rem; border-radius: 12px; }");
-
-        // CTA BANNER
-        out.println("    .cta-banner { margin: 0 4rem 4rem; background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(52,211,153,0.08));");
-        out.println("                  border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 3rem; text-align: center; }");
-        out.println("    .cta-banner h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; }");
-        out.println("    .cta-banner p { color: #94a3b8; margin-bottom: 1.8rem; }");
-        out.println("    .btn-primary { background: linear-gradient(135deg, #38bdf8, #34d399); color: #050d1a;");
-        out.println("                   padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none;");
-        out.println("                   font-weight: 700; font-size: 1rem; display: inline-block; transition: opacity 0.2s; }");
-        out.println("    .btn-primary:hover { opacity: 0.85; }");
-
-        // FOOTER
-        out.println("    footer { text-align: center; padding: 2rem; background: rgba(0,0,0,0.4);");
-        out.println("             border-top: 1px solid rgba(255,255,255,0.06); color: #475569; font-size: 0.875rem; }");
-        out.println("    footer a { color: #38bdf8; text-decoration: none; }");
-        out.println("  </style>");
-        out.println("</head>");
-        out.println("<body>");
-
-        // NAV
-        out.println("  <nav>");
-        out.println("    <div class='logo'>Sanity<span>Care</span></div>");
-        out.println("    <ul>");
-        out.println("      <li><a href='/hospital-webapp/home'>Home</a></li>");
-        out.println("      <li><a class='active' href='/hospital-webapp/services'>Our Services</a></li>");
-        out.println("      <li><a class='nav-cta' href='/hospital-webapp/appointment'>Book Appointment</a></li>");
-        out.println("    </ul>");
-        out.println("  </nav>");
+        HttpServletRequest httpReq = (HttpServletRequest) request;
+        HtmlTemplate.renderHeader(httpReq, out, "Our Services | SanityCare Hospital", "services");
 
         // PAGE HEADER
         out.println("  <div class='page-header'>");
@@ -170,12 +99,13 @@ public class ServicesServlet extends GenericServlet {
         out.println("    <a class='btn-primary' href='/hospital-webapp/appointment'>Book an Appointment &rarr;</a>");
         out.println("  </div>");
 
-        // FOOTER
-        out.println("  <footer>");
-        out.println("    <p>&copy; 2026 SanityCare Hospital &nbsp;|&nbsp; <a href='/hospital-webapp/home'>Home</a> &nbsp;|&nbsp; <a href='/hospital-webapp/services'>Services</a> &nbsp;|&nbsp; <a href='/hospital-webapp/appointment'>Book Appointment</a></p>");
-        out.println("  </footer>");
-
-        out.println("</body>");
-        out.println("</html>");
+        try {
+            // Use existing httpReq
+            HttpServletResponse httpRes = (HttpServletResponse) response;
+            HtmlTemplate.includeFooter(httpReq, httpRes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
+
