@@ -22,6 +22,25 @@
   </context-param>
 
   <!-- ============================================================ -->
+  <!--  LISTENERS — fire on lifecycle events (no url-pattern needed) -->
+  <!-- ============================================================ -->
+
+  <!-- Listener 1: Fires on app startup and shutdown (ServletContextListener) -->
+  <listener>
+    <listener-class>com.example.AppLifecycleListener</listener-class>
+  </listener>
+
+  <!-- Listener 2: Fires on session create/destroy (HttpSessionListener) -->
+  <listener>
+    <listener-class>com.example.ActiveSessionListener</listener-class>
+  </listener>
+
+  <!-- Listener 3: Fires on session attribute add/remove (HttpSessionAttributeListener) -->
+  <listener>
+    <listener-class>com.example.AuditLogListener</listener-class>
+  </listener>
+
+  <!-- ============================================================ -->
   <!--  FILTER 1: LoggingFilter — Logs every request & response     -->
   <!--  Runs FIRST in the filter chain.                            -->
   <!-- ============================================================ -->

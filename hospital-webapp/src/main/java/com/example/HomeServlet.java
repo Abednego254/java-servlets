@@ -29,14 +29,11 @@ public class HomeServlet implements Servlet {
         System.out.println("==> HomeServlet: service() called — serving the home page.");
 
         // --- GLOBAL VISITOR COUNTER (ServletContext Attribute) ---
+        // NOTE: AppLifecycleListener pre-seeds "totalVisitors" to 0 at startup,
+        // so we can safely increment without a null-check.
         synchronized(this.getServletConfig().getServletContext()) {
-            Integer totalVisitors = (Integer) this.getServletConfig().getServletContext().getAttribute("totalVisitors");
-            if (totalVisitors == null) {
-                totalVisitors = 1;
-            } else {
-                totalVisitors++;
-            }
-            this.getServletConfig().getServletContext().setAttribute("totalVisitors", totalVisitors);
+            int total = (Integer) this.getServletConfig().getServletContext().getAttribute("totalVisitors");
+            this.getServletConfig().getServletContext().setAttribute("totalVisitors", total + 1);
         }
 
         response.setContentType("text/html; charset=UTF-8");
