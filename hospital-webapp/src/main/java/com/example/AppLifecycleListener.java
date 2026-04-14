@@ -1,12 +1,14 @@
 package com.example;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@WebListener
 public class AppLifecycleListener implements ServletContextListener {
 
     private static final DateTimeFormatter FORMATTER =

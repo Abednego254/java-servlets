@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
  * Demonstrates RequestDispatcher.forward()
  * This servlet summarizes the operation performed and renders a success message.
  */
+@WebServlet("/confirmation")
 public class ConfirmationServlet extends HttpServlet {
 
     @Override

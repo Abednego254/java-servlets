@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.GenericServlet;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@WebServlet("/services")
 public class ServicesServlet extends GenericServlet {
 
     /**

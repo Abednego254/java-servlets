@@ -1,11 +1,13 @@
 package com.example;
 
 import jakarta.servlet.http.HttpSessionAttributeListener;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpSessionBindingEvent;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@WebListener
 public class AuditLogListener implements HttpSessionAttributeListener {
 
     private static final DateTimeFormatter FORMATTER =

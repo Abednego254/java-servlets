@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.ServletConfig;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,11 @@ import java.io.PrintWriter;
  * Demonstrates ServletConfig
  * This servlet reads a 'secret password' from web.xml to restrict registration.
  */
+@WebServlet(urlPatterns = {"/register"}, initParams = {
+    @WebInitParam(name = "registrationSecret", value = "Sanity2026"),
+    @WebInitParam(name = "pageName", value = "Staff Registration | SanityCare"),
+    @WebInitParam(name = "pageHeader", value = "Hospital Staff Enrollment")
+})
 public class RegisterServlet extends HttpServlet {
 
     private String secretKey;

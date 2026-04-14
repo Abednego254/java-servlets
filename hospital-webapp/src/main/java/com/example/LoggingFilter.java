@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.time.format.DateTimeFormatter;
  *                                       ← (response flows back through filters)
  *   LoggingFilter ← AuthenticationFilter ← Target Servlet
  */
+@WebFilter("/*")
 public class LoggingFilter implements Filter {
 
     private static final DateTimeFormatter FORMATTER =
