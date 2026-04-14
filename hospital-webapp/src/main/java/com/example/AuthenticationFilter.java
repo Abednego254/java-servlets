@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import java.io.IOException;
  * This replaces the manual session checks that were previously in
  * RegisterServlet.doGet(), RegisterServlet.doPost(), and StaffListServlet.doGet().
  */
+@WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
     @Override

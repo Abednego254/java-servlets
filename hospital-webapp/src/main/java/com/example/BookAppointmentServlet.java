@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@WebServlet("/appointment")
 public class BookAppointmentServlet extends HttpServlet {
 
     private AppointmentService appointmentService = new AppointmentServiceImpl();

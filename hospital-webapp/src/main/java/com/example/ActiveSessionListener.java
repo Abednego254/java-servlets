@@ -1,10 +1,12 @@
 package com.example;
 
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 
+@WebListener
 public class ActiveSessionListener implements HttpSessionListener {
 
     /**

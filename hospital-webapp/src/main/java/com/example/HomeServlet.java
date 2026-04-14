@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.Servlet;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@WebServlet("/home")
 public class HomeServlet implements Servlet {
 
     // We store the config so getServletConfig() can return it.

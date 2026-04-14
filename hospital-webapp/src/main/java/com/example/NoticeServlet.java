@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
  * Demonstrates RequestDispatcher.include()
  * This servlet serves a small HTML fragment that can be included in other pages.
  */
+@WebServlet("/notice")
 public class NoticeServlet extends HttpServlet {
 
     @Override

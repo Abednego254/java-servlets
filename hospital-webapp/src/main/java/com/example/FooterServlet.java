@@ -1,6 +1,7 @@
 package com.example;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import java.io.PrintWriter;
  * This servlet renders the common footer for the entire hospital webapp.
  * It is meant to be included in other pages using dispatchers.
  */
+@WebServlet("/footer")
 public class FooterServlet extends HttpServlet {
 
     @Override
