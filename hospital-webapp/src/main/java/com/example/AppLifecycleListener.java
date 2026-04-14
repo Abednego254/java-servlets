@@ -7,16 +7,6 @@ import jakarta.servlet.ServletContextListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * AppLifecycleListener — implements ServletContextListener.
- *
- * This listener fires ONCE at two key moments in the entire application's life:
- *   1. contextInitialized() → when WildFly/Tomcat starts the app
- *   2. contextDestroyed()   → when WildFly/Tomcat shuts the app down
- *
- * Use cases: pre-loading data, initialising shared state, logging startup time,
- * cleaning up resources on shutdown.
- */
 public class AppLifecycleListener implements ServletContextListener {
 
     private static final DateTimeFormatter FORMATTER =

@@ -6,17 +6,6 @@ import jakarta.servlet.http.HttpSessionBindingEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * AuditLogListener — implements HttpSessionAttributeListener.
- *
- * Fires whenever an attribute is ADDED, REMOVED, or REPLACED on any HttpSession.
- * We use this to create a server-side audit trail of login and logout events.
- *
- * Specifically, it watches for changes to the "user" attribute that our
- * LoginServlet and LogoutServlet manage:
- *   - "user" ADDED   → someone just logged in
- *   - "user" REMOVED → someone just logged out or their session expired
- */
 public class AuditLogListener implements HttpSessionAttributeListener {
 
     private static final DateTimeFormatter FORMATTER =
