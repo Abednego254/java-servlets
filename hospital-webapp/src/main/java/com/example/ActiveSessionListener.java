@@ -5,17 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.servlet.http.HttpSessionListener;
 
-/**
- * ActiveSessionListener — implements HttpSessionListener.
- *
- * Fires whenever an HttpSession is CREATED or DESTROYED anywhere in the application.
- * Maintains a live count of currently active sessions in the ServletContext,
- * which is displayed in the FooterServlet as "Users Online".
- *
- * Note: A session is CREATED the first time request.getSession() or
- * request.getSession(true) is called. A session is DESTROYED when
- * session.invalidate() is called (logout) or the session times out.
- */
 public class ActiveSessionListener implements HttpSessionListener {
 
     /**
