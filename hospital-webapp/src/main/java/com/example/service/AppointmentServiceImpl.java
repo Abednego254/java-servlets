@@ -1,4 +1,4 @@
-package com.example;
+package com.example.service;
 
 public class    AppointmentServiceImpl implements AppointmentService {
 

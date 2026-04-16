@@ -1,24 +1,13 @@
-package com.example;
+package com.example.filter;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-/**
- * AuthenticationFilter — A Jakarta Servlet Filter.
- *
- * This filter mirrors the trainer's LoginFilter pattern from the cohort12 repo.
- * It intercepts EVERY request to the application and decides whether to:
- *   (a) PASS IT THROUGH   → user is logged in, or the URL is public
- *   (b) REDIRECT TO LOGIN → user is not authenticated and tried to reach a protected route
- *
- * This replaces the manual session checks that were previously in
- * RegisterServlet.doGet(), RegisterServlet.doPost(), and StaffListServlet.doGet().
- */
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
@@ -26,15 +15,13 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
-        // Cast to HTTP-specific types to access URI, session, etc.
         HttpServletRequest  httpRequest  = (HttpServletRequest)  servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 
-        String contextPath   = httpRequest.getContextPath();   // e.g. "/hospital-webapp"
-        String requestUri    = httpRequest.getRequestURI();    // e.g. "/hospital-webapp/staff"
+        String contextPath   = httpRequest.getContextPath();
+        String requestUri    = httpRequest.getRequestURI();
 
-        // ── DEFINE PUBLIC (UNPROTECTED) PATHS ─────────────────────────────────
-        // Any request matching these patterns is allowed through WITHOUT a session.
+        // ── DEFINE PUBLIC (UNPROTECTED) PATHS ──
         boolean isPublicPath =
                 requestUri.equals(contextPath + "/home")         ||
                 requestUri.equals(contextPath + "/")             ||
@@ -46,8 +33,6 @@ public class AuthenticationFilter implements Filter {
                 requestUri.startsWith(contextPath + "/login")    ||
                 requestUri.startsWith(contextPath + "/logout");
 
-        // ── CHECK SESSION ──────────────────────────────────────────────────────
-        // getSession(false) → returns null if no session exists (does NOT create one)
         HttpSession session  = httpRequest.getSession(false);
         boolean isLoggedIn   = (session != null && session.getAttribute("user") != null);
 
@@ -55,17 +40,12 @@ public class AuthenticationFilter implements Filter {
                 + " | loggedIn=" + isLoggedIn + " | public=" + isPublicPath);
 
         if (isLoggedIn || isPublicPath) {
-            // ✅ PASS THROUGH: continue the filter chain → next filter or servlet
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            // ❌ BLOCK: destroy any stale session and redirect to login
             if (session != null) {
                 session.invalidate();
             }
             httpResponse.sendRedirect(contextPath + "/login?error=auth_required");
         }
     }
-
-    // init() and destroy() have default implementations in the Filter interface
-    // (Jakarta EE 5+), so we don't need to override them unless we need custom logic.
 }

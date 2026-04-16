@@ -1,5 +1,7 @@
-package com.example;
+package com.example.action;
 
+import com.example.framework.HospitalFramework;
+import com.example.framework.HtmlTemplate;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.ServletConfig;
@@ -116,7 +118,6 @@ public class HomeServlet implements Servlet {
     // ── 3. destroy() ───────────────────────────────────────────────────────
     @Override
     public void destroy() {
-
         System.out.println("==> HomeServlet: destroy() called — servlet unloaded from memory.");
     }
 

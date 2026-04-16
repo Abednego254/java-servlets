@@ -1,11 +1,11 @@
-package com.example;
+package com.example.action;
 
+import com.example.framework.HtmlTemplate;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -13,7 +13,7 @@ import java.io.PrintWriter;
  * Demonstrates RequestDispatcher.forward()
  * This servlet summarizes the operation performed and renders a success message.
  */
-@WebServlet("/confirmation")
+@WebServlet(name = "Confirmation", urlPatterns = { "/confirmation" })
 public class ConfirmationServlet extends HttpServlet {
 
     @Override
@@ -30,15 +30,14 @@ public class ConfirmationServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         // Retrieve data passed from the forwarding servlet
         String type = (String) request.getAttribute("type"); // "appointment" or "registration"
         String name = (String) request.getAttribute("name");
-
         String title = "Success | SanityCare Hospital";
+
         HtmlTemplate.renderHeader(request, out, title, "");
 
         out.println("  <div class='page-wrap'>");
@@ -62,7 +61,7 @@ public class ConfirmationServlet extends HttpServlet {
         }
 
         out.println("    <div class='actions'>");
-        out.println("      <a class='btn btn-primary' href='/hospital-webapp/home'>Return to Home Page &rarr;</a>");
+        out.println("      <a class='btn btn-primary' href='./home'>Return to Home Page &rarr;</a>");
         out.println("    </div>");
         out.println("  </div>");
         out.println("  </div>");
@@ -74,4 +73,3 @@ public class ConfirmationServlet extends HttpServlet {
         }
     }
 }
-

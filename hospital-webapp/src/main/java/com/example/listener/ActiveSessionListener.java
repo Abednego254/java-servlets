@@ -1,4 +1,4 @@
-package com.example;
+package com.example.listener;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.annotation.*;

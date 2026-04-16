@@ -1,16 +1,15 @@
-package com.example;
+package com.example.action;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Demonstrates RequestDispatcher.include()
+ * NoticeServlet — Demonstrates RequestDispatcher.include()
  * This servlet serves a small HTML fragment that can be included in other pages.
  */
 @WebServlet("/notice")
@@ -19,9 +18,8 @@ public class NoticeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         PrintWriter out = response.getWriter();
-
+        
         // Note: When including, we don't send full HTML tags like <html> or <body>
         // because this fragment will be injected into an existing page.
         out.println("<div style='background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1px solid #f59e0b; padding: 1.5rem; border-radius: 16px; margin: 2rem 4rem; text-align: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);'>");

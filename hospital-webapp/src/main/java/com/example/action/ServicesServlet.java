@@ -1,13 +1,13 @@
-package com.example;
+package com.example.action;
 
+import com.example.framework.HtmlTemplate;
 import jakarta.servlet.GenericServlet;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -98,11 +98,10 @@ public class ServicesServlet extends GenericServlet {
         out.println("  <div class='cta-banner'>");
         out.println("    <h2>Ready to See a Specialist?</h2>");
         out.println("    <p>Book your appointment online in under 2 minutes. Our team will confirm within the hour.</p>");
-        out.println("    <a class='btn-primary' href='/hospital-webapp/appointment'>Book an Appointment &rarr;</a>");
+        out.println("    <a class='btn-primary' href='./appointment'>Book an Appointment &rarr;</a>");
         out.println("  </div>");
 
         try {
-            // Use existing httpReq
             HttpServletResponse httpRes = (HttpServletResponse) response;
             HtmlTemplate.includeFooter(httpReq, httpRes);
         } catch (Exception e) {
@@ -110,4 +109,3 @@ public class ServicesServlet extends GenericServlet {
         }
     }
 }
-
