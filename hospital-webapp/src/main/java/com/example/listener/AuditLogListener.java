@@ -1,4 +1,4 @@
-package com.example;
+package com.example.listener;
 
 import jakarta.servlet.http.HttpSessionAttributeListener;
 import jakarta.servlet.annotation.*;

@@ -1,4 +1,4 @@
-package com.example;
+package com.example.framework;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -137,9 +137,11 @@ public class HtmlTemplate {
         if (isLoggedIn) {
             String staffCls = "staff".equals(activeNav) ? "class='active'" : "";
             String registerCls = "register".equals(activeNav) ? "class='active'" : "";
-            out.println("        <li><a " + staffCls + " href='/hospital-webapp/staff'>Staff Directory</a></li>");
-            out.println("        <li><a " + registerCls + " href='/hospital-webapp/register'>New Enrollment</a></li>");
-            out.println("        <li><a href='/hospital-webapp/logout' style='color: #ef4444;'>Logout</a></li>");
+            out.println("        <li><a " + staffCls + " href='./staff_lists'>Staff List</a></li>");
+            out.println("        <li><a " + staffCls + " href='./doctor_lists'>Doctor List</a></li>");
+            out.println("        <li><a " + registerCls + " href='./staff_enroll'>Enroll Staff</a></li>");
+            out.println("        <li><a " + registerCls + " href='./reg_doctor'>Enroll Doctor</a></li>");
+            out.println("        <li><a href='./logout' style='color: #ef4444;'>Logout</a></li>");
         } else {
             String loginCls = "login".equals(activeNav) ? "class='active'" : "";
             out.println("        <li><a " + loginCls + " href='/hospital-webapp/login'>Staff Login</a></li>");

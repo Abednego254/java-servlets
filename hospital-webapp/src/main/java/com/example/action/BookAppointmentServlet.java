@@ -1,11 +1,13 @@
-package com.example;
+package com.example.action;
 
+import com.example.framework.HtmlTemplate;
+import com.example.service.AppointmentService;
+import com.example.service.AppointmentServiceImpl;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -14,19 +16,12 @@ public class BookAppointmentServlet extends HttpServlet {
 
     private AppointmentService appointmentService = new AppointmentServiceImpl();
 
-
-    // ================================================================
-    //  doGet() — runs when the browser sends a GET request to /appointment
-    // ================================================================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         System.out.println("==> BookAppointmentServlet: doGet() called — serving the booking form.");
-
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         HtmlTemplate.renderHeader(request, out, "Book Appointment | SanityCare Hospital", "appointment");
 
         out.println("  <div class='page-wrap'>");
@@ -35,9 +30,8 @@ public class BookAppointmentServlet extends HttpServlet {
         out.println("      <p class='subtitle'>Fill in the form below and our team will confirm your slot within the hour.</p>");
         out.println("      <hr class='divider'>");
 
-        out.println("      <form action='/hospital-webapp/appointment' method='post'>");
-
-        // Row: First + Last name
+        out.println("      <form action='./appointment' method='post'>");
+        
         out.println("        <div class='form-row'>");
         out.println("          <div class='form-group'>");
         out.println("            <label for='firstName'>First Name</label>");
@@ -49,19 +43,16 @@ public class BookAppointmentServlet extends HttpServlet {
         out.println("          </div>");
         out.println("        </div>");
 
-        // Email
         out.println("        <div class='form-group'>");
         out.println("          <label for='email'>Email Address</label>");
         out.println("          <input type='email' id='email' name='email' placeholder='e.g. alice@example.com' required>");
         out.println("        </div>");
 
-        // Phone
         out.println("        <div class='form-group'>");
         out.println("          <label for='phone'>Phone Number</label>");
         out.println("          <input type='tel' id='phone' name='phone' placeholder='e.g. 0712345678' required>");
         out.println("        </div>");
 
-        // Row: Appointment date + Preferred time
         out.println("        <div class='form-row'>");
         out.println("          <div class='form-group'>");
         out.println("            <label for='appointmentDate'>Preferred Date</label>");
@@ -82,7 +73,6 @@ public class BookAppointmentServlet extends HttpServlet {
         out.println("          </div>");
         out.println("        </div>");
 
-        // Department
         out.println("        <div class='form-group'>");
         out.println("          <label for='department'>Department / Specialty</label>");
         out.println("          <select id='department' name='department' required>");
@@ -97,23 +87,20 @@ public class BookAppointmentServlet extends HttpServlet {
         out.println("          </select>");
         out.println("        </div>");
 
-        // Reason / Symptoms
         out.println("        <div class='form-group'>");
         out.println("          <label for='reason'>Brief Reason / Symptoms</label>");
         out.println("          <textarea id='reason' name='reason' placeholder='Briefly describe your symptoms or reason for visit...' required></textarea>");
         out.println("        </div>");
 
-        // Error handling for wrong passcode
         String error = request.getParameter("error");
         if ("wrong_passcode".equals(error)) {
             out.println("<p style='background:#fee2e2; border: 1px solid #ef4444; color:#b91c1c; padding: 1rem; border-radius: 12px; font-weight: 600; margin-bottom: 2rem;'>&#9888; Access Denied: Incorrect Admin Passcode.</p>");
         }
 
-        // Admin Passcode (Requirement: Protected Action)
         out.println("        <div class='form-group'>");
         out.println("          <label for='passcode'>Admin Passcode</label>");
-        out.println("          <input type='password' id='passcode' name='passcode' placeholder='Enter the global master password...' required>");
-        out.println("          <p style='font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;'>Hint: Look at Global context-params in web.xml (Try: SanityAdmin2026)</p>");
+        out.println("          <input type='password' id='passcode' name='passcode' placeholder='Enter global master password...' required>");
+        out.println("          <p style='font-size: 0.75rem; color: #64748b; margin-top: 0.5rem;'>Hint: Try SanityAdmin2026</p>");
         out.println("        </div>");
 
         out.println("        <button type='submit' class='btn-submit'>Confirm Booking &rarr;</button>");
@@ -128,18 +115,11 @@ public class BookAppointmentServlet extends HttpServlet {
         }
     }
 
-
-    // ================================================================
-    //  doPost() — runs when the browser sends a POST request to /appointment
-    // ================================================================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         System.out.println("==> BookAppointmentServlet: doPost() called — processing appointment form.");
 
-        // ── STEP 1: Read the submitted form data ──────────────────────────
-        // request.getParameter("name") matches the name="" on each input/select/textarea
         String firstName       = request.getParameter("firstName");
         String lastName        = request.getParameter("lastName");
         String email           = request.getParameter("email");
@@ -150,48 +130,26 @@ public class BookAppointmentServlet extends HttpServlet {
         String reason          = request.getParameter("reason");
         String enteredPasscode = request.getParameter("passcode");
 
-        // --- GLOBAL PASSCODE VALIDATION (ServletContext) ---
         String globalKey = getServletContext().getInitParameter("globalAdminKey");
         if (globalKey != null && !globalKey.equals(enteredPasscode)) {
-            System.out.println("==> BookAppointmentServlet: Invalid global passcode. Denying access.");
-            response.sendRedirect("/hospital-webapp/appointment?error=wrong_passcode");
+            System.out.println("==> BookAppointmentServlet: Invalid global passcode.");
+            response.sendRedirect("./appointment?error=wrong_passcode");
             return;
         }
 
-        // ── STEP 2: Basic validation ──────────────────────────────────────
-        if (firstName == null || firstName.trim().isEmpty() ||
-            lastName  == null || lastName.trim().isEmpty()  ||
-            email     == null || email.trim().isEmpty()     ||
-            department == null || department.trim().isEmpty()) {
-
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // HTTP 400
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<h2 style='color:red;font-family:sans-serif'>Error: Missing required fields. Please go back and complete the form.</h2>");
+        if (firstName == null || firstName.trim().isEmpty()) {
+            response.sendRedirect("./appointment?error=missing_fields");
             return;
         }
 
-        // ── STEP 3 & 4: Delegate to Service ────────────────────
-        String deptDisplay = appointmentService.getDepartmentDisplayName(department);
-        String appointmentRef;
         try {
-            appointmentRef = appointmentService.bookAppointment(firstName, lastName, email, phone, appointmentDate, appointmentTime, department, reason);
-        } catch (IllegalArgumentException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // HTTP 400
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<h2 style='color:red;font-family:sans-serif'>Error: " + e.getMessage() + " Please go back and complete the form.</h2>");
-            return;
+            String appointmentRef = appointmentService.bookAppointment(firstName, lastName, email, phone, appointmentDate, appointmentTime, department, reason);
+            request.setAttribute("type", "appointment");
+            request.setAttribute("name", firstName);
+            request.setAttribute("ref", appointmentRef);
+            request.getRequestDispatcher("/confirmation").forward(request, response);
+        } catch (Exception e) {
+            throw new ServletException(e);
         }
-
-        // ── STEP 5: HANDOVER TO CONFIRMATION SERVLET ─────────
-        // Instead of rendering HTML here, we use RequestDispatcher.forward()
-        // We set attributes so the ConfirmationServlet knows what to display.
-        request.setAttribute("type", "appointment");
-        request.setAttribute("name", firstName);
-        request.setAttribute("ref", appointmentRef);
-
-        System.out.println("==> BookAppointmentServlet: Forwarding to /confirmation");
-        request.getRequestDispatcher("/confirmation").forward(request, response);
     }
 }
